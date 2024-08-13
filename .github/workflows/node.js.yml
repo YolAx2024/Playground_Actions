@@ -21,19 +21,18 @@ jobs:
 
     steps: # cada ejecución
     - uses: actions/checkout@v4
+    - name: configuración Variable Entorno
+      run: echo "APP_DIR=Pass-List-App/app" >> $GITHUB_ENV
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v4
       with:
         node-version: ${{ matrix.node-version }}   
-    - run: npm install --package-lock-only
-      working-directory: Pass-List-App/app
-    - run: npm ci
-      working-directory: Pass-List-App/app #ejecutarlo en este directorio 
-    - run: npm run build --if-present
-      working-directory: Pass-List-App/app
-    - run: sudo yarn jest --coverage --coverageDirectory ='cobertura_pruebas' #flag
-      working-directory: Pass-List-App/app
-      
+    - run: |
+        npm install --package-lock-only
+        npm ci
+        npm run build --if-present
+        sudo yarn jest --coverage --coverageDirectory ='cobertura_pruebas' #flag
+      working-directory: ${{ env.APP_DIR }} #Pass-List-App/app #ejecutarlo en este directorio 
     - name: publicar carpeta de coberturas
       uses: actions/upload-artifact@v3 #subirlo
       with: 
