@@ -12,16 +12,16 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - name: Tag de version
+      run: echo "UNIQUE_TAG=$(date +%s)" >> $GITHUB_ENV
     - name: Build the Docker image
       run: |
             cd Pass-List-App
-            docker build . --file dockerFile_2 --tag students.azurecr.io/nodejs-app-ygh:$(date +%s)
+            docker build . --file dockerFile_2 --tag students.azurecr.io/nodejs-app-ygh:$UNIQUE_TAG
     - name: Verificar imagen
       run: docker images
     - name: Push Image to ACR
-      uses: julioarruda/pushimagetoregistry@v1
-      with:
-        acr-tokenname: ${{ secrets.TOKEN_NAME }}
-        acr-token: ${{ secrets.ACR_TOKEN_VALUE }}
-        acr-account: students.azurecr.io
-        acr-imagename: students.azurecr.io/nodejs-app-ygh:$(date +%s)
+      run: |
+            docker login -u ${{secrets.TOKEN_NAME}} -p ${{secrets.ACR_TOKEN_VALUE}} students.azurecr.io
+            docher push students.azurecr.io/nodejs-app-ygh:$UNIQUE_TAG
+    
