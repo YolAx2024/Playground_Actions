@@ -18,16 +18,6 @@ jobs:
       run: |
             cd Pass-List-App
             docker build . --file dockerFile_2 --tag students.azurecr.io/nodejs-app-ygh:$UNIQUE_TAG
-    - name: Verificar imagen
-      run: docker images
-    - name: Instalar docker Scout 
-      run: | 
-            docker login -u vn00uu4 dckr_pat_ShlcstjqwKv21cGY2M3JCuK17_Q
-            curl -fsSL https://raw.githubusercontent.com/docker/scout-cli/main/install.sh -o install-scout.sh
-            sh install-scout.sh
-    - name: Analisis de vulnerabilidades
-      run: |
-            docker scout cves students.azurecr.io/nodejs-app-ygh:$UNIQUE_TAG
     - name: Push Image to ACR
       run: |
             docker login -u ${{secrets.TOKEN_NAME}} -p ${{secrets.ACR_TOKEN_VALUE}} students.azurecr.io
