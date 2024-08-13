@@ -23,5 +23,5 @@ jobs:
     - name: Push Image to ACR
       run: |
             docker login -u ${{secrets.TOKEN_NAME}} -p ${{secrets.ACR_TOKEN_VALUE}} students.azurecr.io
-            docher push students.azurecr.io/nodejs-app-ygh:$UNIQUE_TAG
+            docker push students.azurecr.io/nodejs-app-ygh:$UNIQUE_TAG
     
